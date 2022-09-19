@@ -7,11 +7,18 @@ plugins {
 android {
     compileSdk 32
 
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
+
     defaultConfig {
         minSdk 21
         targetSdk 32
-        versionCode 2
-        versionName "0.1.1"
+        versionCode 6
+        versionName "0.1.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -33,27 +40,22 @@ android {
 
 afterEvaluate {
     publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-
-                groupId 'dk.jdc'
-
-                artifactId 'statetogglebutton'
-                version '0.1.1'
-            }
-        }
-
         repositories {
             maven {
                 name = "GitHubPackages"
-
-                url = uri("https://maven.pkg.github.com/naxx1000/StateToggleButton")
-
+                url = uri("https://maven.pkg.github.com/naxx1000/statetogglebutton")
                 credentials {
                     username = GITHUB_PACKAGES_USER
                     password = GITHUB_PACKAGES_KEY
                 }
+            }
+        }
+        publications {
+            gpr(MavenPublication) {
+                from(components.release)
+                groupId 'dk.jdc'
+                artifactId 'statetogglebutton'
+                version '0.1.6'
             }
         }
     }
