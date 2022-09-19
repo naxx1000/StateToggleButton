@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MultiStateToggleButton">
+        <attr name="backgroundColor" format="color" />
+        <attr name="selectionColor" format="color" />
+        <attr name="textColor" format="color" />
+        <attr name="textSize" format="dimension" />
+        <attr name="isDividerEnabled" format="boolean" />
+        <attr name="dividerColor" format="color" />
+        <attr name="dividerWidth" format="dimension" />
+    </declare-styleable>
+</resources>
