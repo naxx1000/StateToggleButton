@@ -48,7 +48,6 @@ class StateToggleButton @JvmOverloads constructor(
     )
 
     init {
-
         context.theme.obtainStyledAttributes(attrs, R.styleable.MultiStateToggleButton, 0, 0)
             .apply {
                 try {
@@ -92,6 +91,14 @@ class StateToggleButton @JvmOverloads constructor(
         }
     }
 
+    fun selectIndex(index: Int) {
+        try {
+            animateByIndex(index)
+        } catch (e: IndexOutOfBoundsException) {
+            e.printStackTrace()
+        }
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         if (buttonItemList.isNotEmpty()) titleWidth = width / buttonItemList.size
@@ -127,73 +134,77 @@ class StateToggleButton @JvmOverloads constructor(
 
                 buttonItem.action.invoke()
 
-                when (index.toFloat()) {
-                    0f -> {
-                        valueAnimatorLeft =
-                            ValueAnimator.ofFloat(cornerRadiusLeft, defaultCornerRadius)
-                        valueAnimatorLeft.duration = animationDuration
-                        valueAnimatorLeft.addUpdateListener {
-                            cornerRadiusLeft = it.animatedValue as Float
-                        }
-
-                        valueAnimatorRight = ValueAnimator.ofFloat(
-                            cornerRadiusRight,
-                            if (buttonItemList.size == 1) defaultCornerRadius else 0f
-                        )
-                        valueAnimatorRight.duration = animationDuration
-                        valueAnimatorRight.addUpdateListener {
-                            cornerRadiusRight = it.animatedValue as Float
-                        }
-
-                        valueAnimatorLeft.start()
-                        valueAnimatorRight.start()
-                    }
-                    buttonItemList.lastIndex.toFloat() -> {
-                        valueAnimatorLeft = ValueAnimator.ofFloat(cornerRadiusLeft, 0f)
-                        valueAnimatorLeft.duration = animationDuration
-                        valueAnimatorLeft.addUpdateListener {
-                            cornerRadiusLeft = it.animatedValue as Float
-                        }
-
-                        valueAnimatorRight =
-                            ValueAnimator.ofFloat(cornerRadiusRight, defaultCornerRadius)
-                        valueAnimatorRight.duration = animationDuration
-                        valueAnimatorRight.addUpdateListener {
-                            cornerRadiusRight = it.animatedValue as Float
-                        }
-
-                        valueAnimatorLeft.start()
-                        valueAnimatorRight.start()
-                    }
-                    else -> {
-                        valueAnimatorLeft = ValueAnimator.ofFloat(cornerRadiusLeft, 0f)
-                        valueAnimatorLeft.duration = animationDuration
-                        valueAnimatorLeft.addUpdateListener {
-                            cornerRadiusLeft = it.animatedValue as Float
-                        }
-
-                        valueAnimatorRight = ValueAnimator.ofFloat(cornerRadiusRight, 0f)
-                        valueAnimatorRight.duration = animationDuration
-                        valueAnimatorRight.addUpdateListener {
-                            cornerRadiusRight = it.animatedValue as Float
-                        }
-
-                        valueAnimatorLeft.start()
-                        valueAnimatorRight.start()
-                    }
-                }
-
-                valueAnimator = ValueAnimator.ofFloat(selectedIndex, index.toFloat())
-                valueAnimator.interpolator = DecelerateInterpolator()
-                valueAnimator.duration = animationDuration
-                valueAnimator.addUpdateListener {
-                    selectedIndex = it.animatedValue as Float
-                    calculateSelectionRect()
-                    invalidate()
-                }
-                valueAnimator.start()
+                animateByIndex(index)
             }
         }
+    }
+
+    private fun animateByIndex(index: Int) {
+        when (index.toFloat()) {
+            0f -> {
+                valueAnimatorLeft =
+                    ValueAnimator.ofFloat(cornerRadiusLeft, defaultCornerRadius)
+                valueAnimatorLeft.duration = animationDuration
+                valueAnimatorLeft.addUpdateListener {
+                    cornerRadiusLeft = it.animatedValue as Float
+                }
+
+                valueAnimatorRight = ValueAnimator.ofFloat(
+                    cornerRadiusRight,
+                    if (buttonItemList.size == 1) defaultCornerRadius else 0f
+                )
+                valueAnimatorRight.duration = animationDuration
+                valueAnimatorRight.addUpdateListener {
+                    cornerRadiusRight = it.animatedValue as Float
+                }
+
+                valueAnimatorLeft.start()
+                valueAnimatorRight.start()
+            }
+            buttonItemList.lastIndex.toFloat() -> {
+                valueAnimatorLeft = ValueAnimator.ofFloat(cornerRadiusLeft, 0f)
+                valueAnimatorLeft.duration = animationDuration
+                valueAnimatorLeft.addUpdateListener {
+                    cornerRadiusLeft = it.animatedValue as Float
+                }
+
+                valueAnimatorRight =
+                    ValueAnimator.ofFloat(cornerRadiusRight, defaultCornerRadius)
+                valueAnimatorRight.duration = animationDuration
+                valueAnimatorRight.addUpdateListener {
+                    cornerRadiusRight = it.animatedValue as Float
+                }
+
+                valueAnimatorLeft.start()
+                valueAnimatorRight.start()
+            }
+            else -> {
+                valueAnimatorLeft = ValueAnimator.ofFloat(cornerRadiusLeft, 0f)
+                valueAnimatorLeft.duration = animationDuration
+                valueAnimatorLeft.addUpdateListener {
+                    cornerRadiusLeft = it.animatedValue as Float
+                }
+
+                valueAnimatorRight = ValueAnimator.ofFloat(cornerRadiusRight, 0f)
+                valueAnimatorRight.duration = animationDuration
+                valueAnimatorRight.addUpdateListener {
+                    cornerRadiusRight = it.animatedValue as Float
+                }
+
+                valueAnimatorLeft.start()
+                valueAnimatorRight.start()
+            }
+        }
+
+        valueAnimator = ValueAnimator.ofFloat(selectedIndex, index.toFloat())
+        valueAnimator.interpolator = DecelerateInterpolator()
+        valueAnimator.duration = animationDuration
+        valueAnimator.addUpdateListener {
+            selectedIndex = it.animatedValue as Float
+            calculateSelectionRect()
+            invalidate()
+        }
+        valueAnimator.start()
     }
 
     private fun calculateSelectionRect() {
