@@ -7,12 +7,14 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import androidx.core.content.res.ResourcesCompat
+import dk.jdc.libs.statetogglebutton.R
 
 class StateToggleButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    private val defaultCornerRadius = 100f
+    private val defaultCornerRadius = 200f
     private val animationDuration = 700L
 
     private var buttonItemList: List<ButtonItem> = emptyList()
@@ -27,7 +29,7 @@ class StateToggleButton @JvmOverloads constructor(
     private var selectionRect = RectF()
     private val selectionPath = Path()
     private var actionDownIndex = 0
-    private var cornerRadiusLeft = 100f
+    private var cornerRadiusLeft = 200f
     private var cornerRadiusRight = 0f
     private var valueAnimator = ValueAnimator()
     private var valueAnimatorLeft = ValueAnimator()
@@ -39,6 +41,7 @@ class StateToggleButton @JvmOverloads constructor(
 
     // Text
     private val textPaint = Paint()
+    private var textFontId: Int = -1
     private var fontMetrics = textPaint.fontMetrics
     private var fontHeight = 0f
 
@@ -53,19 +56,20 @@ class StateToggleButton @JvmOverloads constructor(
             .apply {
                 try {
                     paint.color =
-                        getColor(R.styleable.MultiStateToggleButton_backgroundColor, Color.DKGRAY)
+                        getColor(R.styleable.MultiStateToggleButton_stb_backgroundColor, Color.DKGRAY)
                     selectionPaint.color =
-                        getColor(R.styleable.MultiStateToggleButton_selectionColor, Color.LTGRAY)
+                        getColor(R.styleable.MultiStateToggleButton_stb_selectionColor, Color.LTGRAY)
                     textPaint.color =
-                        getColor(R.styleable.MultiStateToggleButton_textColor, Color.BLACK)
+                        getColor(R.styleable.MultiStateToggleButton_stb_textColor, Color.BLACK)
                     textPaint.textSize =
-                        getDimension(R.styleable.MultiStateToggleButton_textSize, 30f)
+                        getDimension(R.styleable.MultiStateToggleButton_stb_textSize, 30f)
                     dividerPaint.color =
-                        getColor(R.styleable.MultiStateToggleButton_dividerColor, Color.WHITE)
+                        getColor(R.styleable.MultiStateToggleButton_stb_dividerColor, Color.WHITE)
                     isDividerEnabled =
-                        getBoolean(R.styleable.MultiStateToggleButton_isDividerEnabled, false)
+                        getBoolean(R.styleable.MultiStateToggleButton_stb_isDividerEnabled, false)
                     dividerPaint.strokeWidth =
-                        getDimension(R.styleable.MultiStateToggleButton_dividerWidth, 0f)
+                        getDimension(R.styleable.MultiStateToggleButton_stb_dividerWidth, 0f)
+                    textFontId = getResourceId(R.styleable.MultiStateToggleButton_stb_textFont, -1)
                 } finally {
                     recycle()
                 }
@@ -74,6 +78,7 @@ class StateToggleButton @JvmOverloads constructor(
         paint.isAntiAlias = true
         selectionPaint.isAntiAlias = true
         dividerPaint.isAntiAlias = true
+        textPaint.typeface = ResourcesCompat.getFont(context, textFontId)
         textPaint.isAntiAlias = true
         textPaint.textAlign = Paint.Align.CENTER
         fontMetrics = textPaint.fontMetrics

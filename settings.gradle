@@ -13,4 +13,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "StateToggleButton"
-include ':app'
+include ':state_toggle_button_lib'
+include ':sample'

@@ -53,7 +53,7 @@ afterEvaluate {
         publications {
             gpr(MavenPublication) {
                 from(components.release)
-                groupId 'dk.jdc'
+                groupId 'dk.jdc.libs'
                 artifactId 'statetogglebutton'
                 version '0.1.6'
             }
