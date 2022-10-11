@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MultiStateToggleButton">
+        <attr name="stb_backgroundColor" format="color" />
+        <attr name="stb_selectionColor" format="color" />
+        <attr name="stb_textColor" format="color" />
+        <attr name="stb_textSize" format="dimension" />
+        <attr name="stb_isDividerEnabled" format="boolean" />
+        <attr name="stb_dividerColor" format="color" />
+        <attr name="stb_dividerWidth" format="dimension" />
+        <attr name="stb_textFont" format="reference" />
+    </declare-styleable>
+</resources>
