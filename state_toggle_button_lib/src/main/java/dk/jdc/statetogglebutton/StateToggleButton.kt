@@ -97,10 +97,8 @@ class StateToggleButton @JvmOverloads constructor(
     }
 
     fun selectIndex(index: Int) {
-        try {
+        if (index in 0..buttonItemList.lastIndex) {
             animateByIndex(index)
-        } catch (e: IndexOutOfBoundsException) {
-            e.printStackTrace()
         }
     }
 
@@ -137,9 +135,9 @@ class StateToggleButton @JvmOverloads constructor(
             if (event.x > index * titleWidth && event.x < (index + 1) * titleWidth && event.y > 0 && event.y < height) {
                 if (actionDownIndex != index) return@forEachIndexed
 
-                buttonItem.action.invoke()
-
                 animateByIndex(index)
+
+                buttonItem.action.invoke()
             }
         }
     }
